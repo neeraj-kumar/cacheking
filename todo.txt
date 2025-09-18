@@ -1,0 +1,36 @@
+Design for new version:
+- caching many different functions and including function in the cache key
+  - maybe backends can specify a prefix that gets prepended to all (or some?) keys
+- different key_funcs
+- runnable in background/async/futures/threads
+- multiple backends can reuse same strategy?
+- batchable
+  - first input as list
+  - multiple inputs as parallel lists
+  - cartesian product of input args
+  - one output per input
+  - single output, with multiple in subkey
+  - input as dict
+  - output as dict
+  - cache a list or dict:
+    - figure out which are already cached and which aren't
+    - where underlying function takes a batch
+- ignore certain args
+- something for imdb data dump updates -> either run function or read from db/cache?
+- single-value cache with different keys
+  - e.g. the embeddings cache which checks for current normed, scale_mean, scale_std
+- ignore cache for individual calls
+- archival
+- different backing stores - lmdb, numpylmdb
+- more stats/timing
+- prefetch?
+- caching binary files (e.g. web fetch request)
+- per-host timers (like in make_request)?
+- works on class methods (how to check for other instance var dependencies?)
+- external dependencies:
+    external_counter = 0
+    @cache(depends_on=lambda:[external_counter])
+    def things_with_external(a,b,c):
+        global external_counter
+        from time import sleep; sleep(1) # <- simulating a long-running process
+        return external_counter + a + b + c
